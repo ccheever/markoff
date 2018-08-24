@@ -6,6 +6,15 @@ let path = require('path');
 let osascript = require('@expo/osascript');
 
 async function mainAsync(file) {
+  // Foreground the Markoff app
+  let foreground = `
+      tell application "System Events"
+        tell process "Markoff"
+          set frontmost to true
+        end tell
+      end tell
+      `;
+
   if (file) {
     let filePath = path.resolve(file);
 
@@ -18,6 +27,8 @@ async function mainAsync(file) {
 tell application "Markoff"
     open ${JSON.stringify(filePath)}
 end tell
+
+${foreground}
 `);
   } else {
     // Just open the application if there's no file argument given
@@ -25,6 +36,8 @@ end tell
 tell application "Markoff"
     activate
 end tell
+
+${foreground}
 `);
   }
 }
